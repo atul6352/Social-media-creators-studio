@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>30-Day Top 10 Content Plan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #080810; font-family: 'DM Sans', sans-serif; color: #f0ede8; }
+    .back-btn { display: inline-flex; align-items: center; gap: 6px; color: #7a7a9a; font-size: 13px; padding: 10px 16px; text-decoration: none; }
+    .back-btn:hover { color: #ff6b35; }
+  </style>
+</head>
+<body>
+  <a class="back-btn" href="index.html">← Back to Home</a>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const plan = [
+      { day:1, week:"🚗 Week 1: Cars", topic:"Top 10 Fastest Cars in the World 2025", lang:"English", style:"Facts + Wow Factor", hook:"The fastest car does 0-100 in 1.9 seconds!", category:"Cars", slides:["Bugatti Bolide — 500 km/h","Koenigsegg Jesko Absolut — 330 mph","SSC Tuatara — 455 km/h","Hennessey Venom F5 — 484 km/h","Rimac Nevera (Electric!) — 412 km/h","McLaren Speedtail — 403 km/h","Ferrari SF90 Stradale — 340 km/h","Lamborghini Aventador SVJ — 349 km/h","Porsche 911 GT2 RS — 340 km/h","Aston Martin Valkyrie — 402 km/h"]},
+      { day:2, week:"🚗 Week 1: Cars", topic:"Top 10 Best Mileage Cars in India 2025", lang:"Hindi + English", style:"Facts Only", hook:"India ki sabse fuel efficient cars! 🔥", category:"Cars", slides:["Maruti Suzuki Alto K10 — 24.9 km/l","Tata Tiago AMT — 23.84 km/l","Hyundai Grand i10 NIOS — 20.7 km/l","Maruti Suzuki Dzire — 23.26 km/l","Honda Amaze — 18.6 km/l","Maruti Suzuki Baleno — 22.35 km/l","Renault KWID — 22.5 km/l","Tata Altroz — 19.18 km/l","Skoda Slavia — 18.7 km/l","Volkswagen Virtus — 19.4 km/l"]},
+      { day:3, week:"🚗 Week 1: Cars", topic:"Top 10 Safest Cars in the World (5-Star NCAP)", lang:"English", style:"Comparison Style", hook:"Would YOUR car save your life? 😨", category:"Cars", slides:["Volvo EX90 — Perfect 5 Star","Tesla Model Y — 5 Star","BMW iX — 5 Star","Mercedes EQS — 5 Star","Hyundai Ioniq 6 — 5 Star","Kia EV6 — 5 Star","Subaru Outback — 5 Star","Toyota Corolla Cross — 5 Star","Polestar 2 — 5 Star","Genesis GV60 — 5 Star"]},
+      { day:4, week:"🚗 Week 1: Cars", topic:"Top 10 Most Expensive Cars in the World", lang:"Hindi + English", style:"Facts + Wow Factor", hook:"Sabse mehenga car — ek village kharid sakte ho! 😱", category:"Cars", slides:["Bugatti La Voiture Noire — $18M","Pagani Zonda HP Barchetta — $17.5M","Rolls-Royce Sweptail — $13M","Bugatti Centodieci — $9M","Lamborghini Sian Roadster — $3.6M","Bugatti Divo — $5.8M","Ferrari Pininfarina Sergio — $3M","Aston Martin Valkyrie — $3.2M","Koenigsegg Regera — $1.9M","McLaren P1 LM — $3.6M"]},
+      { day:5, week:"🚗 Week 1: Cars", topic:"Top 10 Best Electric Cars 2025 — Range & Performance", lang:"English", style:"Comparison Style", hook:"No petrol, no problem. These EVs will blow your mind!", category:"Cars", slides:["Mercedes EQS — 780km range","Tesla Model S — 652km range","BMW iX — 630km range","Hyundai Ioniq 6 — 614km range","Kia EV6 — 528km range","Volkswagen ID.7 — 621km range","Audi Q8 e-tron — 582km range","Volvo EX90 — 580km range","Polestar 3 — 560km range","Rivian R1T — 507km range"]},
+      { day:6, week:"🏭 Week 2: Companies", topic:"Top 10 Most Valuable Companies in the World 2025", lang:"English", style:"Facts + Wow Factor", hook:"These companies are worth MORE than most countries! 🤯", category:"Companies", slides:["Apple — $3.5 Trillion","Microsoft — $3.1 Trillion","NVIDIA — $2.8 Trillion","Alphabet (Google) — $2.2 Trillion","Amazon — $2.1 Trillion","Saudi Aramco — $1.8 Trillion","Meta — $1.5 Trillion","TSMC — $900 Billion","Berkshire Hathaway — $870 Billion","Eli Lilly — $750 Billion"]},
+      { day:7, week:"🏭 Week 2: Companies", topic:"Top 10 Best Smartphone Brands — Camera, Battery & Performance", lang:"Hindi + English", style:"Comparison Style", hook:"Kaun sa phone sabse best hai? 📱", category:"Companies", slides:["Apple iPhone 16 Pro — Best ecosystem","Samsung Galaxy S25 Ultra — Best display","Google Pixel 9 Pro — Best camera AI","OnePlus 13 — Best value flagship","Xiaomi 15 Ultra — Best zoom camera","Sony Xperia 1 VII — Best for creators","Vivo X200 Pro — Best portrait camera","OPPO Find X8 Pro — Best charging","Motorola Edge 50 Ultra — Best battery","Nothing Phone 3 — Best design"]},
+      { day:8, week:"🏭 Week 2: Companies", topic:"Top 10 Richest People in the World 2025", lang:"English", style:"Facts + Wow Factor", hook:"These 10 people own more wealth than half of humanity! 😮", category:"Companies", slides:["Elon Musk — $400B+","Jeff Bezos — $230B","Mark Zuckerberg — $200B","Larry Ellison — $195B","Bill Gates — $160B","Warren Buffett — $145B","Larry Page — $140B","Sergey Brin — $132B","Steve Ballmer — $128B","Mukesh Ambani — $116B 🇮🇳"]},
+      { day:9, week:"🏭 Week 2: Companies", topic:"Top 10 Best Food & Beverage Companies in the World", lang:"Hindi + English", style:"Facts Only", hook:"Yeh companies roz tumhara khaana banati hain! 🍔", category:"Companies", slides:["Nestlé — 2000+ brands worldwide","PepsiCo — $91B revenue","Anheuser-Busch — World's #1 beer","Tyson Foods — Largest meat company","Archer Daniels Midland — Grain giant","Kraft Heinz — 200+ brands","Mondelēz — Oreo, Cadbury, Belvita","Coca-Cola — In 200+ countries","Unilever — Dove, Knorr, Lipton","JBS — World's largest meat processor"]},
+      { day:10, week:"🏭 Week 2: Companies", topic:"Top 10 Best Car Manufacturers — Quality, Sales & Legacy", lang:"English", style:"Comparison Style", hook:"Which brand makes the BEST cars? The data doesn't lie.", category:"Companies", slides:["Toyota — #1 in global sales & reliability","Volkswagen Group — Owns 12 brands!","Mercedes-Benz — King of luxury since 1886","BMW — Ultimate driving machine","Ford — Built America's roads","Honda — Most reliable engines ever","Tesla — Reinvented the car","Hyundai-Kia — Best value for money","Ferrari — 0 compromises, all passion","Rolls-Royce — The pinnacle of luxury"]},
+      { day:11, week:"🌍 Week 3: World Facts", topic:"Top 10 Richest Countries in the World (GDP per Capita)", lang:"English", style:"Facts + Wow Factor", hook:"The richest country has $240,000 income per person! 😲", category:"World", slides:["Luxembourg — $143,743/person","Singapore — $133,894/person","Ireland — $124,596/person","Norway — $101,103/person","UAE — $92,160/person","Switzerland — $91,990/person","USA — $80,034/person","Denmark — $68,827/person","Netherlands — $67,984/person","Australia — $64,491/person"]},
+      { day:12, week:"🌍 Week 3: World Facts", topic:"Top 10 Tallest Buildings in the World", lang:"Hindi + English", style:"Facts + Wow Factor", hook:"Sabse unchi building dekh ke chakkar aa jaaye! 🏙️", category:"World", slides:["Burj Khalifa, Dubai — 828m","Merdeka 118, Malaysia — 679m","Shanghai Tower, China — 632m","Abraj Al-Bait, Mecca — 601m","Ping An Finance Centre — 599m","Lotte World Tower — 555m","One World Trade Center — 541m","Guangzhou CTF Finance — 530m","Tianjin CTF Finance — 530m","CITIC Tower — 528m"]},
+      { day:13, week:"🌍 Week 3: World Facts", topic:"Top 10 Most Powerful Armies in the World 2025", lang:"English", style:"Comparison Style", hook:"India is in the TOP 4. Here's how they rank 👇", category:"World", slides:["USA — 1.4M active, $900B budget","Russia — 1.3M active, nuclear power","China — 2M active, fastest growing","India — 1.4M active, 3rd largest 🇮🇳","France — NATO's strongest European force","UK — Elite special forces","South Korea — Most tech-advanced","Pakistan — Nuclear capability","Japan — Self-Defense Forces growing","Israel — Most battle-tested per capita"]},
+      { day:14, week:"🌍 Week 3: World Facts", topic:"Top 10 Happiest Countries in the World 2025", lang:"Hindi + English", style:"Facts Only", hook:"Duniya ke sabse khush log kahan rehte hain? 😄", category:"World", slides:["Finland — #1 for 8 years in a row!","Denmark — Work-life balance is king","Iceland — Nature + community","Sweden — Free healthcare & education","Netherlands — Cycling + tulips + happiness","Norway — Oil wealth shared equally","Luxembourg — Highest wages in EU","Switzerland — Clean, safe, prosperous","Australia — Sun, freedom & opportunity","New Zealand — Lord of the Rings + peace"]},
+      { day:15, week:"🌍 Week 3: World Facts", topic:"Top 10 Largest Companies by Employees", lang:"English", style:"Facts + Wow Factor", hook:"This one company has MORE employees than most armies!", category:"World", slides:["Walmart — 2.1 Million employees","Amazon — 1.5 Million","China National Petroleum — 1.4M","State Grid Corp China — 896K","Hon Hai (Foxconn) — 767K","China Post Group — 710K","Agricultural Bank of China — 460K","Samsung Electronics — 266K","McDonalds — 2M+ including franchise","Indian Railways — 1.4M 🇮🇳"]},
+      { day:16, week:"💻 Week 4: Tech & Life", topic:"Top 10 Best Laptops in the World 2025", lang:"English", style:"Comparison Style", hook:"Best laptop for YOU depends on what you do.", category:"Tech", slides:["Apple MacBook Pro M4 — Best for creators","Dell XPS 15 — Best Windows overall","Lenovo ThinkPad X1 Carbon — Best for business","ASUS ROG Zephyrus G16 — Best for gaming","Microsoft Surface Pro 11 — Best 2-in-1","HP Spectre x360 — Best battery life","Razer Blade 16 — Best premium gaming","Acer Swift 14 AI — Best budget performance","Samsung Galaxy Book4 Ultra — Best display","LG Gram 17 — Lightest 17-inch laptop"]},
+      { day:17, week:"💻 Week 4: Tech & Life", topic:"Top 10 Most Downloaded Apps in the World 2025", lang:"Hindi + English", style:"Facts + Wow Factor", hook:"Yeh apps tumhare phone pe bhi hain na? 📱", category:"Tech", slides:["TikTok — 4B+ downloads lifetime","Instagram — 3.8B+ downloads","Facebook — 3.5B+ downloads","WhatsApp — 3B+ active users","YouTube — 2.5B monthly users","Telegram — 900M+ users","Snapchat — 750M+ users","X (Twitter) — 600M+ users","LinkedIn — 1B+ members","Spotify — 600M+ active listeners"]},
+      { day:18, week:"💻 Week 4: Tech & Life", topic:"Top 10 Best Airlines in the World 2025", lang:"English", style:"Comparison Style", hook:"Flying soon? These airlines will change your experience!", category:"Travel", slides:["Singapore Airlines — #1 worldwide 2025","Qatar Airways — Best business class","Emirates — Most routes globally","ANA All Nippon Airways — Best service","Cathay Pacific — Best Asian carrier","Lufthansa — Best European carrier","Air New Zealand — Most innovative","Turkish Airlines — Most countries served","EVA Air — Best economy class","Japan Airlines — Most punctual"]},
+      { day:19, week:"💻 Week 4: Tech & Life", topic:"Top 10 Best Football Clubs in the World 2025", lang:"Hindi + English", style:"Facts + Wow Factor", hook:"Football ke bhagwan — yeh hain duniya ke TOP 10 clubs! ⚽", category:"Sports", slides:["Real Madrid — 15 Champions League titles","Manchester City — Dominant in England","Barcelona — Messi's legacy lives on","Bayern Munich — Germany's giant","Liverpool — The Reds of Anfield","PSG — Mbappe's former home","Arsenal — Unbeaten legacy","Chelsea — Most spending in history","Atletico Madrid — Defensive masters","Inter Milan — Italy's powerhouse"]},
+      { day:20, week:"💻 Week 4: Tech & Life", topic:"Top 10 Most Visited Tourist Places in the World", lang:"English", style:"Facts Only", hook:"Have you visited any of these? Comment below! ✈️", category:"Travel", slides:["Eiffel Tower, France — 7M visitors/year","Colosseum, Italy — 7.6M/year","Machu Picchu, Peru — 1.5M/year","Great Wall of China — 10M+/year","Taj Mahal, India — 8M/year 🇮🇳","Angkor Wat, Cambodia — 2.6M/year","Petra, Jordan — 1.1M/year","Chichen Itza, Mexico — 4.4M/year","Stonehenge, UK — 1.6M/year","Sydney Opera House — 10.9M/year"]},
+      { day:21, week:"🇮🇳 Week 5: India Special", topic:"Top 10 Richest Indians 2025", lang:"Hindi + English", style:"Facts + Wow Factor", hook:"India ke sabse ameer log — kitna paisa hai inke paas? 💰", category:"India", slides:["Mukesh Ambani — ₹9.7 Lakh Crore","Gautam Adani — ₹8.2 Lakh Crore","Shiv Nadar — ₹2.4 Lakh Crore","Cyrus Poonawalla — ₹2.0 Lakh Crore","Kumar Birla — ₹1.8 Lakh Crore","Uday Kotak — ₹1.4 Lakh Crore","Lakshmi Mittal — ₹1.3 Lakh Crore","Dilip Shanghvi — ₹1.2 Lakh Crore","Radhakishan Damani — ₹1.2 Lakh Crore","Sunil Mittal — ₹1.0 Lakh Crore"]},
+      { day:22, week:"🇮🇳 Week 5: India Special", topic:"Top 10 Best Indian Startup Companies 2025", lang:"English", style:"Comparison Style", hook:"India's startup scene is ON FIRE! 🚀", category:"India", slides:["Reliance Jio — Telecom revolution","BYJU'S — EdTech giant comeback","Zepto — 10-minute grocery delivery","PhonePe — India's #1 payments app","Razorpay — Powering Indian e-commerce","Meesho — Social commerce king","CRED — Rewarding bill payments","Groww — Investing for millennials","Slice — Neobank for youth","Nykaa — Beauty meets tech"]},
+      { day:23, week:"🇮🇳 Week 5: India Special", topic:"Top 10 Best Places to Visit in Gujarat", lang:"Hindi + English", style:"Facts Only", hook:"Gujarat mein itna kuch hai — aapne dekha kya? 🌅", category:"India", slides:["Rann of Kutch — World's largest salt flat","Gir National Park — Only Asiatic Lions","Dwarka — One of India's holiest cities","Somnath Temple — First Jyotirlinga","Rani ki Vav — UNESCO World Heritage","Saputara — Gujarat's only hill station","Lothal — Ancient Indus Valley site","Statue of Unity — World's tallest statue","Ahmedabad — India's first UNESCO city","Mandvi Beach — Hidden gem of Gujarat"]},
+      { day:24, week:"🇮🇳 Week 5: India Special", topic:"Top 10 Indian Foods Famous Worldwide", lang:"English", style:"Facts + Wow Factor", hook:"Indian food has CONQUERED the world. Here's proof! 🍛", category:"India", slides:["Butter Chicken — UK's favourite dish","Biryani — Searched 1B+ times yearly","Samosa — Sold in 160+ countries","Masala Chai — Global tea revolution","Naan — Every restaurant worldwide","Dal Makhani — Vegetarian masterpiece","Tandoori Chicken — 50+ years global icon","Gulab Jamun — Middle East loves it","Paneer Tikka — Vegetarian world wonder","Mango Lassi — Summer drink worldwide"]},
+      { day:25, week:"🇮🇳 Week 5: India Special", topic:"Top 10 Most Powerful Indian Brands 2025", lang:"Hindi + English", style:"Comparison Style", hook:"Yeh Indian brands ab poori duniya mein chhaa rahe hain! 🌍", category:"India", slides:["Tata Group — 100+ companies, 6 continents","Infosys — IT giant in 50+ countries","Reliance — India's most valued company","HDFC Bank — Asia's best bank","Mahindra — SUVs loved worldwide","Bajaj Auto — World's #1 3-wheeler maker","Asian Paints — #9 globally","Wipro — Global IT powerhouse","Hero MotoCorp — World's #1 2-wheeler","HUL — Hindustan Unilever — 50+ brands"]},
+      { day:26, week:"🎯 Week 6: Bonus Viral", topic:"Top 10 Highest Paid Jobs in the World 2025", lang:"English", style:"Facts + Wow Factor", hook:"These jobs pay ₹1 CRORE+ per month!", category:"Career", slides:["Neurosurgeon — $800K+/year","Anesthesiologist — $700K+/year","Orthodontist — $600K+/year","Petroleum Engineer — $500K+/year","AI/ML Engineer — $450K+ (growing fast!)","Investment Banker — $400K+","Pilot (Senior) — $350K+","Software Architect — $320K+","Data Scientist — $300K+","Patent Attorney — $280K+"]},
+      { day:27, week:"🎯 Week 6: Bonus Viral", topic:"Top 10 Most Popular Sports in the World", lang:"Hindi + English", style:"Facts Only", hook:"Cricket sirf India ka nahi — dekho duniya konsa khel pasand karti hai!", category:"Sports", slides:["Football (Soccer) — 4B fans","Cricket — 2.5B fans 🇮🇳","Basketball — 2.2B fans","Hockey — 2B fans","Tennis — 1B fans","Volleyball — 900M fans","Table Tennis — 875M fans","Baseball — 500M fans","Rugby — 475M fans","Golf — 450M fans"]},
+      { day:28, week:"🎯 Week 6: Bonus Viral", topic:"Top 10 Best Universities in the World 2025", lang:"English", style:"Comparison Style", hook:"These universities produce BILLIONAIRES and Nobel Prize winners!", category:"Education", slides:["MIT — #1 for engineering & tech","Harvard — #1 for business & law","Stanford — Silicon Valley's heart","Oxford — 700 years of excellence","Cambridge — 100+ Nobel Prize winners","ETH Zurich — Europe's MIT","Imperial College London — UK's tech hub","UCL — World-class research","University of Chicago — Economics king","Caltech — Smallest, most elite"]},
+      { day:29, week:"🎯 Week 6: Bonus Viral", topic:"Top 10 Most Spoken Languages in the World", lang:"Hindi + English", style:"Facts + Wow Factor", hook:"Aapki bhasha kahan hai? 🌐", category:"World", slides:["English — 1.5B speakers","Mandarin Chinese — 1.1B speakers","Hindi — 600M speakers 🇮🇳","Spanish — 560M speakers","French — 280M speakers","Arabic — 274M speakers","Bengali — 270M speakers 🇮🇳","Portuguese — 250M speakers","Russian — 255M speakers","Urdu — 230M speakers"]},
+      { day:30, week:"🎯 Week 6: Bonus Viral", topic:"Top 10 Most Watched YouTube Channels in the World", lang:"English", style:"Facts + Wow Factor", hook:"These channels make MORE MONEY than most companies! 😱", category:"Tech", slides:["T-Series — 275M subs 🇮🇳 #1!","MrBeast — 340M subs, $100M+ revenue","Cocomelon — 180M subs (kids king)","SET India — 175M subs 🇮🇳","YouTube Movies — 175M subs","Kids Diana Show — 125M subs","PewDiePie — 111M subs (OG king)","Like Nastya — 122M subs","Vlad and Niki — 117M subs","Zee Music Company — 105M subs 🇮🇳"]},
+    ];
+
+    const categories = ["All","Cars","Companies","World","Tech","India","Sports","Travel","Career","Education"];
+    const styleColors = {"Facts + Wow Factor":"#ff6b35","Facts Only":"#4ecdc4","Comparison Style":"#7c5cbf"};
+    const langColors = {"English":"#3a86ff","Hindi + English":"#ff006e"};
+
+    const css = `
+      .app { min-height:100vh; padding:10px 16px 40px; max-width:860px; margin:0 auto; }
+      .header { text-align:center; margin-bottom:28px; }
+      .badge { display:inline-block; background:#ff6b3520; border:1px solid #ff6b3550; color:#ff6b35; font-size:11px; letter-spacing:2px; padding:5px 14px; border-radius:20px; margin-bottom:10px; }
+      h1 { font-family:'Syne',sans-serif; font-size:clamp(22px,5vw,34px); font-weight:800; }
+      h1 span { color:#ff6b35; }
+      .subtitle { color:#7a7a9a; font-size:13px; margin-top:6px; }
+      .stats { display:flex; gap:10px; justify-content:center; margin-bottom:24px; flex-wrap:wrap; }
+      .stat { background:#13131f; border:1px solid #1e1e32; border-radius:12px; padding:10px 18px; text-align:center; }
+      .stat-num { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:#ff6b35; }
+      .stat-label { font-size:11px; color:#7a7a9a; letter-spacing:1px; }
+      .filter-label { font-size:11px; color:#7a7a9a; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+      .pill-row { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+      .pill { padding:6px 12px; border-radius:20px; border:1px solid #1e1e32; background:transparent; color:#7a7a9a; font-size:12px; cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+      .pill.active { border-color:#ff6b35; color:#ff6b35; background:#ff6b3515; }
+      .week-header { font-family:'Syne',sans-serif; font-size:16px; font-weight:800; margin:20px 0 12px; border-left:3px solid #ff6b35; padding-left:10px; }
+      .card { background:#13131f; border:1px solid #1e1e32; border-radius:16px; padding:18px; margin-bottom:12px; cursor:pointer; transition:all 0.2s; }
+      .card:hover { border-color:#ff6b3555; transform:translateY(-1px); }
+      .card.open { border-color:#ff6b35; }
+      .card-top { display:flex; align-items:flex-start; gap:12px; }
+      .day-badge { background:#ff6b3520; color:#ff6b35; font-family:'Syne',sans-serif; font-weight:800; font-size:13px; border-radius:8px; padding:6px 10px; min-width:44px; text-align:center; flex-shrink:0; }
+      .card-info { flex:1; }
+      .card-title { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:8px; line-height:1.3; }
+      .card-tags { display:flex; flex-wrap:wrap; gap:6px; }
+      .tag { font-size:11px; padding:3px 10px; border-radius:10px; font-weight:600; }
+      .expand-icon { color:#7a7a9a; font-size:18px; flex-shrink:0; transition:transform 0.2s; }
+      .card.open .expand-icon { transform:rotate(180deg); }
+      .card-body { margin-top:16px; border-top:1px solid #1e1e32; padding-top:16px; }
+      .hook { background:#ff6b3510; border:1px solid #ff6b3530; border-radius:10px; padding:12px 14px; margin-bottom:14px; font-size:14px; font-weight:600; color:#ff9f6b; }
+      .hook-label { font-size:10px; letter-spacing:1px; color:#ff6b35; text-transform:uppercase; margin-bottom:4px; }
+      .slides-title { font-size:11px; letter-spacing:1px; color:#7a7a9a; text-transform:uppercase; margin-bottom:10px; font-weight:600; }
+      .slides { display:flex; flex-direction:column; gap:6px; }
+      .slide { display:flex; align-items:flex-start; gap:10px; padding:9px 12px; background:#080810; border-radius:8px; border:1px solid #1e1e32; }
+      .slide-num { color:#ff6b35; font-weight:700; font-size:12px; min-width:22px; }
+      .slide-text { font-size:13px; color:#c8c5c0; line-height:1.4; }
+      .copy-btn { margin-top:14px; width:100%; padding:10px; background:#ff6b3520; border:1px solid #ff6b3550; color:#ff6b35; border-radius:10px; font-family:'Syne',sans-serif; font-weight:700; font-size:13px; cursor:pointer; letter-spacing:1px; transition:all 0.2s; }
+      .copy-btn:hover { background:#ff6b3535; }
+      .empty { text-align:center; padding:40px; color:#7a7a9a; }
+    `;
+
+    function Card({ item }) {
+      const [open, setOpen] = useState(false);
+      const [copied, setCopied] = useState(false);
+      function copyContent() {
+        const text = `Day ${item.day}: ${item.topic}\n\nHOOK: ${item.hook}\n\n${item.slides.map((s,i)=>`${i+1}. ${s}`).join("\n")}\n\n#top10 #${item.category.toLowerCase()} #viral`;
+        navigator.clipboard.writeText(text);
+        setCopied(true); setTimeout(()=>setCopied(false),2000);
+      }
+      return (
+        <div className={`card ${open?"open":""}`} onClick={()=>setOpen(!open)}>
+          <div className="card-top">
+            <div className="day-badge">D{item.day}</div>
+            <div className="card-info">
+              <div className="card-title">{item.topic}</div>
+              <div className="card-tags">
+                <span className="tag" style={{background:langColors[item.lang]+"20",color:langColors[item.lang],border:`1px solid ${langColors[item.lang]}40`}}>{item.lang}</span>
+                <span className="tag" style={{background:styleColors[item.style]+"20",color:styleColors[item.style],border:`1px solid ${styleColors[item.style]}40`}}>{item.style}</span>
+              </div>
+            </div>
+            <span className="expand-icon">▾</span>
+          </div>
+          {open && (
+            <div className="card-body" onClick={e=>e.stopPropagation()}>
+              <div className="hook"><div className="hook-label">🪝 Hook</div>{item.hook}</div>
+              <div className="slides-title">📋 10 Slides</div>
+              <div className="slides">{item.slides.map((s,i)=><div key={i} className="slide"><span className="slide-num">{i+1}.</span><span className="slide-text">{s}</span></div>)}</div>
+              <button className="copy-btn" onClick={copyContent}>{copied?"✓ Copied!":"📋 Copy Content"}</button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function App() {
+      const [catFilter, setCatFilter] = useState("All");
+      const filtered = plan.filter(item => catFilter==="All" || item.category===catFilter);
+      const grouped = {};
+      filtered.forEach(item => { if(!grouped[item.week]) grouped[item.week]=[]; grouped[item.week].push(item); });
+      return (
+        <>
+          <style>{css}</style>
+          <div className="app">
+            <div className="header">
+              <div className="badge">📊 30-Day Plan</div>
+              <h1>Top 10 <span>Content Plan</span></h1>
+              <p className="subtitle">Your complete 30-day carousel calendar — tap any card to see all slides</p>
+            </div>
+            <div className="stats">
+              <div className="stat"><div className="stat-num">30</div><div className="stat-label">Total Posts</div></div>
+              <div className="stat"><div className="stat-num">300</div><div className="stat-label">Slide Ideas</div></div>
+              <div className="stat"><div className="stat-num">6</div><div className="stat-label">Categories</div></div>
+            </div>
+            <div className="filter-label">Filter by Category</div>
+            <div className="pill-row">{categories.map(c=><button key={c} className={`pill ${catFilter===c?"active":""}`} onClick={()=>setCatFilter(c)}>{c}</button>)}</div>
+            {filtered.length===0 ? <div className="empty">No posts match.</div>
+              : Object.entries(grouped).map(([week,items])=>(
+                <div key={week}>
+                  <div className="week-header">{week}</div>
+                  {items.map(item=><Card key={item.day} item={item}/>)}
+                </div>
+              ))
+            }
+          </div>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  </script>
+</body>
+</html>
