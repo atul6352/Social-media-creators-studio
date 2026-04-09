@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Carousel & Reel Creator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0a0f; font-family: 'DM Sans', sans-serif; color: #f0ede8; }
+    .back-btn { display: inline-flex; align-items: center; gap: 6px; color: #7a7a9a; font-size: 13px; padding: 10px 16px; text-decoration: none; }
+    .back-btn:hover { color: #ff6b35; }
+  </style>
+</head>
+<body>
+  <a class="back-btn" href="index.html">← Back to Home</a>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const LANGUAGES = ["English", "Hindi + English (Mix)", "Hindi", "Gujarati"];
+    const PLATFORMS = ["Instagram", "YouTube Shorts", "Both"];
+    const NICHES = ["Motivation", "Education", "News", "Farming", "Business", "Health", "Entertainment", "Spiritual", "Technology", "Food", "Cars", "Facts"];
+    const TONES = ["Inspiring", "Funny", "Educational", "Emotional", "Professional", "Casual", "Wow Factor"];
+
+    const COLORS = {
+      bg: "#0a0a0f", card: "#13131f", border: "#1e1e32",
+      accent1: "#ff6b35", accent2: "#f7c59f", accent3: "#7c5cbf",
+      text: "#f0ede8", muted: "#7a7a9a",
+    };
+
+    const css = `
+      .app { min-height: 100vh; padding: 10px 16px 40px; max-width: 800px; margin: 0 auto; }
+      .header { text-align: center; margin-bottom: 28px; }
+      .header-badge { display: inline-block; background: #ff6b3520; border: 1px solid #ff6b3550; color: #ff6b35; font-size: 11px; letter-spacing: 2px; padding: 5px 14px; border-radius: 20px; margin-bottom: 12px; }
+      .header h1 { font-family: 'Syne', sans-serif; font-size: clamp(24px, 6vw, 38px); font-weight: 800; line-height: 1.1; }
+      .header h1 span { color: #ff6b35; }
+      .header p { color: #7a7a9a; margin-top: 8px; font-size: 14px; }
+      .tabs { display: flex; gap: 8px; margin-bottom: 24px; background: #13131f; border: 1px solid #1e1e32; border-radius: 14px; padding: 6px; }
+      .tab { flex: 1; padding: 10px; border: none; border-radius: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 13px; transition: all 0.2s; background: transparent; color: #7a7a9a; }
+      .tab.active { background: #ff6b35; color: white; }
+      .card { background: #13131f; border: 1px solid #1e1e32; border-radius: 18px; padding: 22px; margin-bottom: 16px; }
+      .card-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #7a7a9a; margin-bottom: 16px; }
+      .input-group { margin-bottom: 16px; }
+      .input-label { font-size: 12px; color: #7a7a9a; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 1px; }
+      .inp, .textar { width: 100%; background: #0a0a0f; border: 1px solid #1e1e32; color: #f0ede8; border-radius: 10px; padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border 0.2s; }
+      .inp:focus, .textar:focus { border-color: #ff6b35; }
+      .textar { resize: vertical; min-height: 80px; }
+      .pill-group { display: flex; flex-wrap: wrap; gap: 8px; }
+      .pill { padding: 7px 14px; border-radius: 20px; border: 1px solid #1e1e32; background: transparent; color: #7a7a9a; font-size: 13px; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+      .pill.selected { border-color: #ff6b35; color: #ff6b35; background: #ff6b3518; }
+      .row { display: flex; gap: 10px; }
+      .row .input-group { flex: 1; }
+      .generate-btn { width: 100%; padding: 16px; background: #ff6b35; border: none; border-radius: 14px; color: white; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; cursor: pointer; letter-spacing: 1px; transition: all 0.2s; margin-top: 4px; }
+      .generate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+      .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+      .loading { text-align: center; padding: 40px; color: #7a7a9a; }
+      .spinner { width: 36px; height: 36px; border: 3px solid #1e1e32; border-top-color: #ff6b35; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .result-section { margin-top: 24px; }
+      .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+      .result-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; }
+      .copy-btn { padding: 8px 16px; background: #7c5cbf22; border: 1px solid #7c5cbf55; color: #7c5cbf; border-radius: 8px; font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 600; transition: all 0.2s; }
+      .copy-btn:hover { background: #7c5cbf44; }
+      .slides-container { display: flex; flex-direction: column; gap: 12px; }
+      .slide-card { background: #0a0a0f; border: 1px solid #1e1e32; border-radius: 14px; padding: 18px; position: relative; overflow: hidden; }
+      .slide-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #ff6b35; }
+      .slide-number { font-size: 11px; color: #ff6b35; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+      .slide-heading { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; margin-bottom: 8px; }
+      .slide-body { font-size: 14px; color: #7a7a9a; line-height: 1.6; }
+      .slide-cta { margin-top: 10px; font-size: 13px; color: #f7c59f; font-weight: 600; }
+      .script-block { background: #0a0a0f; border: 1px solid #1e1e32; border-radius: 14px; padding: 18px; margin-bottom: 10px; }
+      .script-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+      .script-text { font-size: 15px; line-height: 1.7; white-space: pre-wrap; }
+      .hashtags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+      .hashtag { font-size: 12px; color: #7c5cbf; background: #7c5cbf15; border: 1px solid #7c5cbf33; padding: 4px 10px; border-radius: 12px; }
+      .error { background: #ff4d4d18; border: 1px solid #ff4d4d44; color: #ff8080; padding: 14px 18px; border-radius: 12px; font-size: 14px; margin-top: 16px; }
+    `;
+
+    function SelectField({ label, value, onChange, options }) {
+      return (
+        <div className="input-group">
+          <label className="input-label">{label}</label>
+          <select className="inp" value={value} onChange={e => onChange(e.target.value)}>
+            {options.map(o => <option key={o}>{o}</option>)}
+          </select>
+        </div>
+      );
+    }
+
+    function PillGroup({ label, options, value, onChange }) {
+      return (
+        <div className="input-group">
+          <label className="input-label">{label}</label>
+          <div className="pill-group">
+            {options.map(o => (
+              <button key={o} className={`pill ${value === o ? "selected" : ""}`} onClick={() => onChange(o)}>{o}</button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function CarouselResult({ data }) {
+      const [copied, setCopied] = useState(false);
+      const text = data.slides.map((s, i) => `SLIDE ${i+1}: ${s.heading}\n${s.body}${s.cta ? "\n→ " + s.cta : ""}`).join("\n\n");
+      return (
+        <div className="result-section">
+          <div className="result-header">
+            <div className="result-title">📱 {data.slides.length} Slides Ready</div>
+            <button className="copy-btn" onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000); }}>{copied ? "✓ Copied!" : "Copy All"}</button>
+          </div>
+          <div className="slides-container">
+            {data.slides.map((slide, i) => (
+              <div key={i} className="slide-card">
+                <div className="slide-number">Slide {i + 1}</div>
+                <div className="slide-heading">{slide.heading}</div>
+                <div className="slide-body">{slide.body}</div>
+                {slide.cta && <div className="slide-cta">→ {slide.cta}</div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function ReelResult({ data }) {
+      const [copied, setCopied] = useState(false);
+      const text = `HOOK:\n${data.hook}\n\nSCRIPT:\n${data.script}\n\nCTA:\n${data.cta}\n\nCAPTION:\n${data.caption}\n\nHASHTAGS:\n${data.hashtags.join(" ")}`;
+      return (
+        <div className="result-section">
+          <div className="result-header">
+            <div className="result-title">🎬 Reel Script Ready</div>
+            <button className="copy-btn" onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000); }}>{copied ? "✓ Copied!" : "Copy All"}</button>
+          </div>
+          <div className="script-block">
+            <div className="script-label" style={{color:"#ff6b35"}}>🪝 Hook (First 3 seconds)</div>
+            <div className="script-text">{data.hook}</div>
+          </div>
+          <div className="script-block">
+            <div className="script-label" style={{color:"#7c5cbf"}}>📝 Script</div>
+            <div className="script-text">{data.script}</div>
+          </div>
+          <div className="script-block">
+            <div className="script-label" style={{color:"#4ecdc4"}}>📣 Call to Action</div>
+            <div className="script-text">{data.cta}</div>
+          </div>
+          <div className="script-block">
+            <div className="script-label" style={{color:"#f7c59f"}}>✍️ Caption</div>
+            <div className="script-text">{data.caption}</div>
+            <div className="hashtags">{data.hashtags.map((h, i) => <span key={i} className="hashtag">{h}</span>)}</div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const [tab, setTab] = useState("carousel");
+      const [topic, setTopic] = useState("");
+      const [niche, setNiche] = useState("Education");
+      const [language, setLanguage] = useState("English");
+      const [platform, setPlatform] = useState("Instagram");
+      const [slideCount, setSlideCount] = useState("10");
+      const [tone, setTone] = useState("Wow Factor");
+      const [loading, setLoading] = useState(false);
+      const [result, setResult] = useState(null);
+      const [error, setError] = useState(null);
+
+      async function generate() {
+        if (!topic.trim()) { setError("Please enter a topic first!"); return; }
+        setLoading(true); setResult(null); setError(null);
+        const isCarousel = tab === "carousel";
+        const prompt = isCarousel
+          ? `Create a ${slideCount}-slide Instagram carousel post in ${language} language.\nTopic: "${topic}"\nNiche: ${niche}\nTone: ${tone}\nPlatform: ${platform}\n\nReturn ONLY valid JSON (no markdown, no backticks):\n{"slides": [{"heading": "slide title", "body": "2-3 sentences of content", "cta": "optional call to action on last slide only"}]}\nMake it engaging and scroll-stopping. First slide is the hook. Last slide has CTA.`
+          : `Create a short-form reel script in ${language} language.\nTopic: "${topic}"\nNiche: ${niche}\nTone: ${tone}\nPlatform: ${platform}\n\nReturn ONLY valid JSON (no markdown, no backticks):\n{"hook": "first 3 seconds hook","script": "full voiceover script","cta": "call to action","caption": "instagram caption","hashtags": ["#tag1","#tag2","#tag3","#tag4","#tag5"]}`;
+        try {
+          const res = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, messages: [{ role: "user", content: prompt }] })
+          });
+          const data = await res.json();
+          const text = data.content.map(b => b.text || "").join("");
+          const clean = text.replace(/```json|```/g, "").trim();
+          setResult(JSON.parse(clean));
+        } catch(e) { setError("Something went wrong. Please try again."); }
+        setLoading(false);
+      }
+
+      return (
+        <>
+          <style>{css}</style>
+          <div className="app">
+            <div className="header">
+              <div className="header-badge">⚡ AI Powered</div>
+              <h1>Carousel & Reel<br/><span>Creator</span></h1>
+              <p>Generate content in English, Hindi or Gujarati instantly</p>
+            </div>
+            <div className="tabs">
+              <button className={`tab ${tab==="carousel"?"active":""}`} onClick={() => { setTab("carousel"); setResult(null); }}>📱 Carousel</button>
+              <button className={`tab ${tab==="reel"?"active":""}`} onClick={() => { setTab("reel"); setResult(null); }}>🎬 Reel Script</button>
+            </div>
+            <div className="card">
+              <div className="card-title">Content Settings</div>
+              <div className="input-group">
+                <label className="input-label">Topic / Idea</label>
+                <input className="inp" placeholder={tab==="carousel" ? "e.g. Top 10 Fastest Cars in the World" : "e.g. Why morning walk changes your life"} value={topic} onChange={e => setTopic(e.target.value)} />
+              </div>
+              <div className="row">
+                <SelectField label="Language" value={language} onChange={setLanguage} options={LANGUAGES} />
+                <SelectField label="Platform" value={platform} onChange={setPlatform} options={PLATFORMS} />
+              </div>
+              <PillGroup label="Niche" options={NICHES} value={niche} onChange={setNiche} />
+              <PillGroup label="Tone" options={TONES} value={tone} onChange={setTone} />
+              {tab==="carousel" && <SelectField label="Number of Slides" value={slideCount} onChange={setSlideCount} options={["5","7","10"]} />}
+            </div>
+            <button className="generate-btn" onClick={generate} disabled={loading}>
+              {loading ? "Generating..." : tab==="carousel" ? "✨ Generate Carousel" : "🎬 Generate Reel Script"}
+            </button>
+            {error && <div className="error">⚠️ {error}</div>}
+            {loading && <div className="loading"><div className="spinner"/><p>Creating your content...</p></div>}
+            {result && tab==="carousel" && <CarouselResult data={result} />}
+            {result && tab==="reel" && <ReelResult data={result} />}
+          </div>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
